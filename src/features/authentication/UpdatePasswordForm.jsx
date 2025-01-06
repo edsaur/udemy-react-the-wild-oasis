@@ -10,7 +10,7 @@ function UpdatePasswordForm() {
   const { register, handleSubmit, formState, getValues, reset } = useForm();
   const { errors } = formState;
 
-  const { updateUser, isUpdating } = useUpdateUser();
+  const { isUpdating, mutate: updateUser } = useUpdateUser();
 
   function onSubmit({ password }) {
     updateUser({ password }, { onSuccess: reset });
@@ -19,8 +19,8 @@ function UpdatePasswordForm() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow
-        label="Password (min 8 characters)"
-        error={errors?.password?.message}
+        label="New Password (min 8 characters)"
+        errors={errors?.password?.message}
       >
         <Input
           type="password"
@@ -39,13 +39,13 @@ function UpdatePasswordForm() {
 
       <FormRow
         label="Confirm password"
-        error={errors?.passwordConfirm?.message}
+        errors={errors?.passwordConfirm?.message}
       >
         <Input
           type="password"
           autoComplete="new-password"
           id="passwordConfirm"
-          disabled={isUpdating}
+          // disabled={isUpdating}
           {...register("passwordConfirm", {
             required: "This field is required",
             validate: (value) =>

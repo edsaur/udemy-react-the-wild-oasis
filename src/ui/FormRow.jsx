@@ -5,6 +5,7 @@ const StyledFormRow = styled.div`
   align-items: center;
   grid-template-columns: 24rem 1fr 1.2fr;
   gap: 2.4rem;
+  margin-bottom: 20px;
 
   padding: 1.2rem 0;
 
@@ -36,10 +37,10 @@ const Error = styled.span`
   color: var(--color-red-700);
 `;
 
-export default function FormRow({ label, errors, children }) {
+export default function FormRow({ label = '', errors = null, children }) {
   return (
     <StyledFormRow>
-      {label && <Label htmlFor={children.props.id}>{label}</Label>}
+      {label && <Label htmlFor={children.props?.id}>{label}</Label>}
       {children}
       {errors && <Error>{errors}</Error>}
     </StyledFormRow>

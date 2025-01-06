@@ -11,6 +11,35 @@ export async function getCabins() {
   return data;
 }
 
+export async function getCabinCapacity(id) {
+  const { data, error } = await supabase
+    .from("cabins")
+    .select("id, capacity")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Cabins couldn't be loaded");
+  }
+
+  return data;
+}
+
+export async function getCabinPrice(id) {
+  const { data, error } = await supabase
+    .from("cabins")
+    .select("id, regularPrice, discount")
+    .eq("id", id)
+    .single();
+  if (error) {
+    console.error(error);
+    throw new Error("Cabins couldn't be loaded");
+  }
+
+  return data;
+}
+
 export async function createAndEditCabin(newCabin, id) {
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
   console.log(hasImagePath);
@@ -110,14 +139,19 @@ export default async function deleteCabin({ cabinImage, cabinId }) {
   }
 
   if (duplicates.length <= 1) {
-    const {error: imageDeletionError} = await supabase.storage.from('cabin-images').remove([currentImagePath]);
+    const { error: imageDeletionError } = await supabase.storage
+      .from("cabin-images")
+      .remove([currentImagePath]);
     if (imageDeletionError) {
       console.error(imageDeletionError + " the error is at imageDeletion.");
       throw new Error("Cabin image could not be deleted!");
     }
   }
 
-  const { data, error: dataDeletionError } = await supabase.from("cabins").delete().eq("id", cabinId);
+  const { data, error: dataDeletionError } = await supabase
+    .from("cabins")
+    .delete()
+    .eq("id", cabinId);
 
   if (dataDeletionError) {
     console.error(dataDeletionError + " the error is at data deletion");
